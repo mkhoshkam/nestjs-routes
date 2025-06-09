@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# TypeScript compiled output
+dist/
+build/
+*.js
+*.js.map
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+
+# IDE
+.vscode/
+.idea/ 
