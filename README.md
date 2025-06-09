@@ -1,4 +1,4 @@
-# NestJS Routes Inspector
+# NestJS Routes
 
 🔍 A powerful CLI tool to inspect and list all routes in your NestJS applications. Get instant visibility into your API endpoints with both human-readable and JSON output formats.
 
