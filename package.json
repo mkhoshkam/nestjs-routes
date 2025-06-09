@@ -1,19 +1,68 @@
 {
-    "name": "nestjs-routes",
-    "version": "0.1.0",
-    "bin": {
-      "nestjs-routes": "./bin/index.ts"
+  "name": "nestjs-routes",
+  "version": "0.1.0",
+  "description": "CLI tool to inspect and list routes in a NestJS project",
+  "main": "dist/src/route-scanner.js",
+  "bin": {
+    "nestjs-routes": "./dist/bin/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node bin/index.ts",
+    "dev": "ts-node bin/index.ts",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@nestjs/core": "^10.0.0",
+    "reflect-metadata": "^0.1.14",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "@types/yargs": "^17.0.33",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "nestjs",
+    "cli",
+    "routes",
+    "inspector",
+    "api",
+    "endpoints",
+    "discovery",
+    "typescript",
+    "node"
+  ],
+  "authors": [
+    {
+      "name": "MohammadrezaM96",
+      "email": "mardani93.itsu@gmail.com",
+      "url": "https://github.com/MohammadrezaM96"
     },
-    "scripts": {
-      "start": "ts-node bin/index.ts"
-    },
-    "dependencies": {
-      "@nestjs/core": "^10.0.0",
-      "yargs": "^17.7.2"
-    },
-    "devDependencies": {
-      "ts-node": "^10.9.1",
-      "typescript": "^5.3.0"
+    {
+      "name": "mkhoshkam",
+      "email": "mh.khoshkam@gmail.com",
+      "url": "https://github.com/mkhoshkam"
     }
-  }
-  
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Technance/nestjs-routes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Technance/nestjs-routes/issues"
+  },
+  "homepage": "https://github.com/Technance/nestjs-routes#readme",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
+}
