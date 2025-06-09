@@ -24,12 +24,19 @@ export interface RouteMetadata {
   method: string;
 }
 
+function isTestEnvironment(): boolean {
+  return process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
+}
+
 export async function listRoutes(options: ScanOptions) {
   const { appPath, className, json, prefix } = options;
 
   const absPath = path.resolve(process.cwd(), appPath);
   if (!existsSync(absPath)) {
     console.error(`❌ Cannot find file: ${absPath}`);
+    if (isTestEnvironment()) {
+      throw new Error(`Cannot find file: ${absPath}`);
+    }
     process.exit(1);
   }
 
@@ -37,6 +44,9 @@ export async function listRoutes(options: ScanOptions) {
   const AppModule = mod[className];
   if (!AppModule) {
     console.error(`❌ Cannot find class "${className}" in ${absPath}`);
+    if (isTestEnvironment()) {
+      throw new Error(`Cannot find class "${className}" in ${absPath}`);
+    }
     process.exit(1);
   }
 
