@@ -10,6 +10,8 @@
 - 🔧 **Flexible Input** - Supports both TypeScript and compiled JavaScript modules
 - 🏷️ **Smart Grouping** - Routes organized by controller for better understanding
 - 📝 **Detailed Information** - Shows HTTP methods, paths, and handler references
+- ⚡ **Static Analysis** - No application bootstrapping or external dependencies required
+- 🛡️ **Reliable** - Works without database connections, Redis, or environment setup
 
 ## Installation
 
@@ -177,12 +179,22 @@ interface RouteMap {
 - **NestJS**: >= 8.0.0 (tested with 10.x)
 - **TypeScript**: >= 4.0.0 (if using TypeScript modules)
 
+## Why This Approach?
+
+Unlike tools that require bootstrapping your entire NestJS application, this package uses **static analysis** to discover routes. This means:
+
+✅ **No External Dependencies** - Works without databases, Redis, or other services  
+✅ **Fast Execution** - No need to wait for application startup  
+✅ **CI/CD Friendly** - Perfect for build pipelines and automated tooling  
+✅ **Environment Independent** - No need for `.env` files or configuration  
+✅ **Lightweight** - Minimal memory footprint and resource usage
+
 ## How It Works
 
-1. **Safe Module Loading** - Dynamically imports your NestJS module without starting the full application
-2. **ApplicationContext** - Uses NestJS ApplicationContext for safe introspection
-3. **Metadata Extraction** - Leverages reflection to extract route metadata from decorators
-4. **Smart Discovery** - Systematically discovers all controllers and their endpoints
+1. **Static Analysis** - Analyzes your NestJS modules without bootstrapping the entire application
+2. **Metadata Extraction** - Uses reflection to extract route metadata from decorators
+3. **Zero Dependencies** - No need for database connections, external services, or environment setup
+4. **Smart Discovery** - Recursively discovers all controllers and their endpoints from module imports
 
 ## Use Cases
 
