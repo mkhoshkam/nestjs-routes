@@ -1,6 +1,6 @@
 {
   "name": "nestjs-routes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI tool to inspect and list routes in a NestJS project",
   "main": "dist/src/route-scanner.js",
   "bin": {
@@ -70,12 +70,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Technance/nestjs-routes.git"
+    "url": "https://github.com/mkhoshkam/nestjs-routes.git"
   },
   "bugs": {
-    "url": "https://github.com/Technance/nestjs-routes/issues"
+    "url": "https://github.com/mkhoshkam/nestjs-routes/issues"
   },
-  "homepage": "https://github.com/Technance/nestjs-routes#readme",
+  "homepage": "https://github.com/mkhoshkam/nestjs-routes#readme",
   "license": "MIT",
   "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
 }
