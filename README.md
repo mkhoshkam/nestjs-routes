@@ -61,14 +61,15 @@ nestjs-routes --app ./src/app.module.ts --class AppModule --prefix api/v1
 
 ### Command Line Options
 
-| Option      | Alias | Required | Default     | Description                                            |
-| ----------- | ----- | -------- | ----------- | ------------------------------------------------------ |
-| `--app`     | `-a`  | ✅       | -           | Path to the NestJS application module file             |
-| `--class`   | `-c`  | ✅       | `AppModule` | Name of the application module class                   |
-| `--json`    | `-j`  | ❌       | `false`     | Output routes as JSON instead of human-readable format |
-| `--prefix`  | `-p`  | ❌       | -           | Global route prefix to include in paths                |
-| `--help`    | `-h`  | ❌       | -           | Show help information                                  |
-| `--version` | `-v`  | ❌       | -           | Show version information                               |
+| Option          | Alias | Required | Default     | Description                                            |
+| --------------- | ----- | -------- | ----------- | ------------------------------------------------------ |
+| `--app`         | `-a`  | ✅       | -           | Path to the NestJS application module file             |
+| `--class`       | `-c`  | ❌       | `AppModule` | Name of the application module class                   |
+| `--json`        | `-j`  | ❌       | `false`     | Output routes as JSON instead of human-readable format |
+| `--prefix`      | `-p`  | ❌       | -           | Global route prefix to include in paths                |
+| `--help-module` | `-hm` | ❌       | -           | Show module compatibility troubleshooting help         |
+| `--help`        | `-h`  | ❌       | -           | Show help information                                  |
+| `--version`     | `-v`  | ❌       | -           | Show version information                               |
 
 ### Examples
 
@@ -96,6 +97,22 @@ $ nestjs-routes --app ./src/app.module.ts --class AppModule
    GET     /posts/:id
 
 📊 Found 8 routes across 3 controllers
+```
+
+#### Module Compatibility Help
+
+```bash
+$ nestjs-routes --help-module
+
+🔧 NestJS Routes - Module Compatibility Help
+
+If you're experiencing module loading issues, try these solutions:
+
+📋 Common Issues & Solutions:
+
+1. "Cannot use import statement outside a module"
+   ✅ Try compiling your TypeScript first: npm run build
+   ✅ Point to compiled JS: --app ./dist/app.module.js
 ```
 
 #### JSON Output
@@ -178,6 +195,49 @@ interface RouteMap {
 - **Node.js**: >= 16.0.0
 - **NestJS**: >= 8.0.0 (tested with 10.x)
 - **TypeScript**: >= 4.0.0 (if using TypeScript modules)
+
+## Troubleshooting
+
+### Module System Issues
+
+If you encounter "Cannot use import statement outside a module" or similar errors:
+
+```bash
+# 1. Try the help command first
+nestjs-routes --help-module
+
+# 2. Compile TypeScript first (recommended)
+npm run build
+nestjs-routes --app ./dist/app.module.js --class AppModule
+
+# 3. For ES Modules projects
+nestjs-routes --app ./dist/app.module.js --class AppModule
+
+# 4. For CommonJS projects
+nestjs-routes --app ./src/app.module.ts --class AppModule
+```
+
+### Class Not Found
+
+If the tool cannot find your module class:
+
+```bash
+# Check available exports (error message will show them)
+nestjs-routes --app ./src/app.module.ts --class WrongName
+
+# Try different class names
+nestjs-routes --app ./src/app.module.ts --class MyAppModule
+```
+
+### Path Issues
+
+```bash
+# Use absolute paths if relative paths fail
+nestjs-routes --app /full/path/to/app.module.js --class AppModule
+
+# Check that the file exists
+ls -la ./src/app.module.ts
+```
 
 ## Why This Approach?
 

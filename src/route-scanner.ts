@@ -48,6 +48,47 @@ function isTestEnvironment(): boolean {
   return process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
 }
 
+async function loadModule(modulePath: string): Promise<any> {
+  try {
+    // Try different import strategies for compatibility
+    
+    // First attempt: Direct ES module import (works for compiled JS and modern TS setups)
+    try {
+      const fileUrl = `file://${modulePath}`;
+      const mod = await import(fileUrl);
+      return mod;
+    } catch (urlError) {
+      // If file:// URL fails, try direct path
+      try {
+        const mod = await import(modulePath);
+        return mod;
+      } catch (directError) {
+        // If both fail and it's a TypeScript file, try with ts-node registration
+        if (modulePath.endsWith('.ts')) {
+          try {
+            // Try to register ts-node if available
+            try {
+              require('ts-node/register');
+            } catch {
+              // ts-node not available, that's ok
+            }
+            
+            // Try requiring the module (works for CommonJS)
+            delete require.cache[require.resolve(modulePath)];
+            const mod = require(modulePath);
+            return mod;
+          } catch (requireError) {
+            throw new Error(`Failed to load module: ${directError instanceof Error ? directError.message : String(directError)}`);
+          }
+        }
+        throw directError;
+      }
+    }
+  } catch (error) {
+    throw new Error(`Cannot load module "${modulePath}": ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
 export async function listRoutes(options: ScanOptions) {
   const { appPath, className, json, prefix } = options;
 
@@ -61,10 +102,15 @@ export async function listRoutes(options: ScanOptions) {
   }
 
   try {
-    const mod = await import(absPath);
-    const AppModule = mod[className];
+    const mod = await loadModule(absPath);
+    const AppModule = mod[className] || mod.default?.[className] || mod.default;
+    
     if (!AppModule) {
       console.error(`❌ Cannot find class "${className}" in ${absPath}`);
+      console.error(`Available exports: ${Object.keys(mod).join(', ')}`);
+      if (mod.default) {
+        console.error(`Default export keys: ${Object.keys(mod.default).join(', ')}`);
+      }
       if (isTestEnvironment()) {
         throw new Error(`Cannot find class "${className}" in ${absPath}`);
       }
@@ -79,7 +125,27 @@ export async function listRoutes(options: ScanOptions) {
       displayRoutes(routeMap);
     }
   } catch (error) {
-    console.error('❌ Error during route extraction:', error instanceof Error ? error.message : error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    // Provide more helpful error messages for common issues
+    if (errorMessage.includes('Cannot use import statement outside a module')) {
+      console.error('❌ Module system compatibility issue detected.');
+      console.error('💡 Suggestions:');
+      console.error('   1. Try compiling your TypeScript files first: npm run build');
+      console.error('   2. Point to the compiled JS file: --app ./dist/app.module.js');
+      console.error('   3. Ensure your tsconfig.json is compatible with Node.js');
+      console.error(`   4. Original error: ${errorMessage}`);
+    } else if (errorMessage.includes('Cannot resolve module')) {
+      console.error('❌ Module resolution failed.');
+      console.error('💡 Suggestions:');
+      console.error('   1. Check if the file path is correct');
+      console.error('   2. Make sure all dependencies are installed');
+      console.error('   3. Try using an absolute path');
+      console.error(`   4. Original error: ${errorMessage}`);
+    } else {
+      console.error('❌ Error during route extraction:', errorMessage);
+    }
+    
     if (isTestEnvironment()) {
       throw error;
     }

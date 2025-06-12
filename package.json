@@ -1,6 +1,6 @@
 {
   "name": "nestjs-routes",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "CLI tool to inspect and list routes in a NestJS project using static analysis",
   "main": "dist/src/route-scanner.js",
   "bin": {
